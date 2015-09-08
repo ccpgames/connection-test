@@ -17,6 +17,7 @@ import (
 )
 
 var versionNum = "1.0.4"
+var tranquility = "87.237.38.200"
 var saveURLContents = flag.Bool("keepweb", false, "Stores the contents of http requests in individual files")
 
 var writer io.Writer
@@ -133,7 +134,6 @@ func testPing() {
 	log.Println("======PING TEST======")
 
 	var cmd *exec.Cmd
-	tranquility := "87.237.38.200"
 
 	if runtime.GOOS == "windows" {
 		cmd = exec.Command("ping", tranquility)
@@ -154,7 +154,7 @@ func tcpConnect(port uint64) {
 	log.Println("======TCP TEST======")
 
 	log.Println("tcpConnect on port ", port)
-	conStr := "87.237.38.200:" + strconv.FormatUint(port, 10)
+	conStr := tranquility + ":" + strconv.FormatUint(port, 10)
 	conn, err := net.Dial("tcp", conStr)
 
 	if err != nil {
