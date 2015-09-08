@@ -18,6 +18,8 @@ import (
 var versionNum = "1.0.4"
 var saveURLContents = flag.Bool("keepweb", false, "Stores the contents of http requests in individual files")
 
+var writer io.Writer
+
 func main() {
 	fmt.Println("Running tests, results are being written to result.txt")
 	flag.Parse()
@@ -31,8 +33,10 @@ func main() {
 
 	defer outfile.Close()
 
+	writer = io.MultiWriter(os.Stdout, outfile)
+
 	log.SetFlags(log.LstdFlags | log.Lmicroseconds)
-	log.SetOutput(io.MultiWriter(os.Stdout, outfile))
+	log.SetOutput(writer)
 
 	log.Println("CCP connection test tool version ", versionNum)
 
@@ -121,7 +125,7 @@ func testPing() {
 
 	if runtime.GOOS == "windows" {
 		cmd := exec.Command("ping", "87.237.38.200")
-		cmd.Stdout = os.Stdout
+		cmd.Stdout = writer
 		err := cmd.Run()
 
 		if err != nil {
@@ -131,7 +135,7 @@ func testPing() {
 		}
 	} else if runtime.GOOS == "darwin" {
 		cmd := exec.Command("ping", "-c 5", "87.237.38.200")
-		cmd.Stdout = os.Stdout
+		cmd.Stdout = writer
 		err := cmd.Run()
 
 		if err != nil {
