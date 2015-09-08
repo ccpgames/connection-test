@@ -1,16 +1,18 @@
 package main
 
-import "fmt"
-import "strconv"
-import "net/http"
-import "io/ioutil"
-import "net"
-import "io"
-import "runtime"
-import "os/exec"
-import "os"
-import "flag"
-import "strings"
+import (
+	"flag"
+	"fmt"
+	"io"
+	"io/ioutil"
+	"net"
+	"net/http"
+	"os"
+	"os/exec"
+	"runtime"
+	"strconv"
+	"strings"
+)
 
 var versionNum = "1.0.4"
 var saveUrlContents = flag.Bool("keepweb", false, "Stores the contents of http requests in individual files")
