@@ -132,28 +132,21 @@ func testLauncherURL(url string) {
 func testPing() {
 	log.Println("======PING TEST======")
 
+	var cmd *exec.Cmd
+	tranquility := "87.237.38.200"
+
 	if runtime.GOOS == "windows" {
-		cmd := exec.Command("ping", "87.237.38.200")
-		cmd.Stdout = writer
-		err := cmd.Run()
-
-		if err != nil {
-			log.Println("OS does not have ping utility")
-			log.Println(err)
-			return
-		}
-	} else if runtime.GOOS == "darwin" {
-		cmd := exec.Command("ping", "-c 5", "87.237.38.200")
-		cmd.Stdout = writer
-		err := cmd.Run()
-
-		if err != nil {
-			log.Println("OS does not have ping utility")
-			log.Println(err)
-			return
-		}
+		cmd = exec.Command("ping", tranquility)
 	} else {
-		log.Println("unsupported OS, no ping")
+		cmd = exec.Command("ping", "-c 5", tranquility)
+	}
+
+	cmd.Stdout = writer
+	err := cmd.Run()
+
+	if err != nil {
+		log.Println("ping test failure")
+		log.Println(err)
 	}
 }
 
