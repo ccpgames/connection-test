@@ -54,14 +54,14 @@ func testPortOpen(port uint64) {
 	resp, err := http.Get(urlStr)
 	if err != nil {
 		fmt.Printf("port open check failed, could not get address\r\n")
-		fmt.Println(err)
+		fmt.Println(err, "\r\n")
 		return
 	}
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		fmt.Printf("port open check failed, could not read response\r\n")
-		fmt.Println(err)
+		fmt.Println(err, "\r\n")
 		return
 	}
 	bodyString := string(body[:])
@@ -73,14 +73,14 @@ func testLauncherURL(url string) {
 	resp, err := http.Get(url)
 	if err != nil {
 		fmt.Printf("failed to connect to url " + url + " with error:\r\n")
-		fmt.Println(err)
+		fmt.Println(err, "\r\n")
 		return
 	}
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		fmt.Printf("Connected, but failed to read contents of URL " + url + " with error:\r\n")
-		fmt.Println(err)
+		fmt.Println(err, "\r\n")
 		return
 	}
 	if *saveUrlContents {
@@ -103,11 +103,21 @@ func testPing() {
 	if runtime.GOOS == "windows" {
 		cmd := exec.Command("ping", "87.237.38.200")
 		cmd.Stdout = os.Stdout
-		cmd.Run()
+		err := cmd.Run()
+		if err != nil {
+			fmt.Printf("OS does not have ping utility\r\n")
+			fmt.Println(err, "\r\n")
+			return
+		}
 	} else if runtime.GOOS == "darwin" {
 		cmd := exec.Command("ping", "-c 5", "87.237.38.200")
 		cmd.Stdout = os.Stdout
-		cmd.Run()
+		err := cmd.Run()
+		if err != nil {
+			fmt.Printf("OS does not have ping utility\r\n")
+			fmt.Println(err, "\r\n")
+			return
+		}
 	} else {
 		fmt.Printf("unsupported OS, no ping\r\n")
 	}
@@ -120,7 +130,7 @@ func tcpConnect(port uint64) {
 	conn, err := net.Dial("tcp", conStr)
 	if err != nil {
 		fmt.Printf("Error connecting:\r\n")
-		fmt.Println(err)
+		fmt.Println(err, "\r\n")
 		return
 	}
 	defer conn.Close()
@@ -129,7 +139,7 @@ func tcpConnect(port uint64) {
 	if err != nil {
 		if err != io.EOF {
 			fmt.Printf("error reading buffer\r\n")
-			fmt.Println(err)
+			fmt.Println(err, "\r\n")
 			return
 		}
 	}
