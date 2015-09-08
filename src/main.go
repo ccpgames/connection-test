@@ -15,7 +15,7 @@ import (
 )
 
 var versionNum = "1.0.4"
-var saveUrlContents = flag.Bool("keepweb", false, "Stores the contents of http requests in individual files")
+var saveURLContents = flag.Bool("keepweb", false, "Stores the contents of http requests in individual files")
 
 func main() {
 	fmt.Printf("Running tests, results are being written to result.txt")
@@ -33,7 +33,7 @@ func main() {
 	defer outfile.Close()
 	os.Stdout = outfile
 	fmt.Printf("CCP connection test tool version " + versionNum + "\r\n")
-	if *saveUrlContents == false {
+	if *saveURLContents == false {
 		fmt.Printf("successful web requests will not be stored for examination, specify -keepweb=true to store them\r\n")
 	}
 	fmt.Printf("begin tests\r\n")
@@ -85,7 +85,7 @@ func testLauncherURL(url string) {
 		fmt.Println(err, "\r\n")
 		return
 	}
-	if *saveUrlContents {
+	if *saveURLContents {
 		filename := "./" + cleanURL(url) + ".txt"
 		outfile, err := os.Create(filename)
 		if err != nil {
