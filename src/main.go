@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"flag"
 	"fmt"
 	"io"
@@ -20,6 +21,14 @@ var saveURLContents = flag.Bool("keepweb", false, "Stores the contents of http r
 
 var writer io.Writer
 
+type CarriageReturnReplacer struct {
+	w io.Writer
+}
+
+func (c CarriageReturnReplacer) Write(p []byte) (int, error) {
+	return c.w.Write(bytes.Replace(p, []byte("\n"), []byte("\r\n"), -1))
+}
+
 func main() {
 	fmt.Println("Running tests, results are being written to result.txt")
 	flag.Parse()
@@ -33,7 +42,7 @@ func main() {
 
 	defer outfile.Close()
 
-	writer = io.MultiWriter(os.Stdout, outfile)
+	writer = io.MultiWriter(os.Stdout, CarriageReturnReplacer{outfile})
 
 	log.SetFlags(log.LstdFlags | log.Lmicroseconds)
 	log.SetOutput(writer)
