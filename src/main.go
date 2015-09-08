@@ -21,14 +21,8 @@ var saveURLContents = flag.Bool("keepweb", false, "Stores the contents of http r
 func main() {
 	fmt.Println("Running tests, results are being written to result.txt")
 	flag.Parse()
-	path, err := os.Getwd()
 
-	if err != nil {
-		fmt.Println("Fatal error: could not get working directory")
-		panic(err)
-	}
-
-	outfile, err := os.Create(path + "/result.txt")
+	outfile, err := os.Create("result.txt")
 
 	if err != nil {
 		fmt.Println("Fatal error: could not create results file")
