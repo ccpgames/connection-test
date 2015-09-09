@@ -27,7 +27,13 @@ type CarriageReturnReplacer struct {
 }
 
 func (c CarriageReturnReplacer) Write(p []byte) (int, error) {
-	return c.w.Write(bytes.Replace(p, []byte("\n"), []byte("\r\n"), -1))
+	_, err := c.w.Write(bytes.Replace(p, []byte("\n"), []byte("\r\n"), -1))
+
+	if err != nil {
+		return 0, err
+	}
+
+	return len(p), nil
 }
 
 func main() {
