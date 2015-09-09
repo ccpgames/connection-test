@@ -16,7 +16,7 @@ import (
 	"strings"
 )
 
-var versionNum = "1.0.5"
+var versionNum = "1.0.6"
 var tranquility = "87.237.38.200"
 var saveURLContents = flag.Bool("keepweb", false, "Stores the contents of http requests in individual files")
 
