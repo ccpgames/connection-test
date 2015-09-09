@@ -3,20 +3,20 @@ go:
   - tip
   
 script:
-  - GOARCH=amd64 GOOS=windows go build -o connection_test_amd64.exe
-  - GOARCH=386 GOOS=windows go build -o connection_test_i386.exe
-  - GOARCH=amd64 GOOS=darwin go build -o connection_test_amd64darwin
-  - GOARCH=386 GOOS=darwin go build -o connection_test_i386darwin
+  - GOARCH=amd64 GOOS=windows go build -o $HOME/gopath/bin/connection_test_amd64.exe
+  - GOARCH=386 GOOS=windows go build -o $HOME/gopath/bin/connection_test_i386.exe
+  - GOARCH=amd64 GOOS=darwin go build -o $HOME/gopath/bin/connection_test_amd64darwin
+  - GOARCH=386 GOOS=darwin go build -o $HOME/gopath/bin/connection_test_i386darwin
   
 deploy:
   provider: releases
   api_key:
     secure: ycasUDaRJZjnzaGP4nyJHFpZeELvZXEUDkDC+oHAfh6tGaDAGR5bLxXu1PnGzkgoSoliz8sdFKZmGPyjRBJKhVfmhiI+jbW18q1IwWf4DEjqSazJS42SDLAzuOx2J9NHyAyVhdevzUXiWkTeApvy7KqBTwIw4u/uFghPVLcMi59Xq86wykuEBlEhYr5Q4Aok0SAeCq1SexhPxFtV+P3EoJn0gkw1h77JWmBjLuCWsbocTiAQRPWfTL6TzjMp3g0sRRog04vxqmMt5TAF8RD+MahzisQdLzQJsj+Rdl1GFk4VTEdo4yQ/kTzvyBLmCPwWOk3t7kCxZxWOdW1IzOTcoDVdXSBVYraXZjPVaE4hWV/HDzypjJodd4XbLRGDFyz09XT5zicLVUKuakpmmYTJgYdMpwxtBdXIDvZQtsaJ+iM/0bZHLwPFmfSwJqkpADyGWm8myuGTiyNN651c3tvN0KFUozTe0MAIiBgROUaqE2r1Baz7oKEyzN1SA4gLvN5jyjKnNNp86yQUaQ/GdvSjw+Z5fX4vZS1sLG5oYqMeNYdz86Ulp9f/+ubKx5J6O39qmUEaL3SuKyQI3YULtT2bPXsYM17Z/Vyxzk3VT6jCjxQQ+eKULC0pBz613hhX3Kk4lIQVarnf22kw3/BNg4xn73i2E3rTQTqgwckkXcMWdu4=
   file: 
-    - connection_test_amd64.exe
-    - connection_test_i386.exe
-    - connection_test_amd64darwin
-    - connection_test_i386darwin
+    - $HOME/gopath/bin/connection_test_amd64.exe
+    - $HOME/gopath/bin/connection_test_i386.exe
+    - $HOME/gopath/bin/connection_test_amd64darwin
+    - $HOME/gopath/bin/connection_test_i386darwin
   skip_cleanup: true
   on:
     tags: true
