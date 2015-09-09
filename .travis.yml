@@ -1,0 +1,9 @@
+language: go
+go:
+  - tip
+  
+script:
+  - GOARCH=amd64 GOOS=windows go build -o connection_test_amd64.exe
+  - GOARCH=386 GOOS=windows go build -o connection_test_i386.exe
+  - GOARCH=amd64 GOOS=darwin go build -o connection_test_amd64darwin
+  - GOARCH=386 GOOS=darwin go build -o connection_test_i386darwin
