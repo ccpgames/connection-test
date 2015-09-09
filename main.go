@@ -65,7 +65,8 @@ func main() {
 }
 
 func runTests() {
-	testPing()
+    testPing("8.8.8.8")
+	testPing(tranquility)
 	tcpConnect(26000)
 	tcpConnect(3724)
 	testPortOpen(26000)
@@ -136,15 +137,15 @@ func testLauncherURL(url string) {
 	log.Println("connected and read contents of ", url, " successfully")
 }
 
-func testPing() {
+func testPing(pingTarget string) {
 	log.Println("======PING TEST======")
 
 	var cmd *exec.Cmd
 
 	if runtime.GOOS == "windows" {
-		cmd = exec.Command("ping", tranquility)
+		cmd = exec.Command("ping", pingTarget)
 	} else {
-		cmd = exec.Command("ping", "-c 5", tranquility)
+		cmd = exec.Command("ping", "-c 5", pingTarget)
 	}
 
 	cmd.Stdout = writer
