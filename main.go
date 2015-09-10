@@ -1,8 +1,8 @@
 package main
 
 import (
+	"bufio"
 	"bytes"
-	"flag"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -16,9 +16,9 @@ import (
 	"strings"
 )
 
-var versionNum = "1.0.7"
+var versionNum = "1.0.8"
 var tranquility = "87.237.38.200"
-var saveURLContents = flag.Bool("keepweb", false, "Stores the contents of http requests in individual files")
+var saveURLContents = false
 
 var writer io.Writer
 
@@ -38,7 +38,29 @@ func (c CarriageReturnReplacer) Write(p []byte) (int, error) {
 
 func main() {
 	fmt.Println("Running tests, results are being written to result.txt")
-	flag.Parse()
+
+	saveChoice := false
+	for saveChoice == false {
+		fmt.Println("Do you wish to save the results of http requests for examination? y/n (default: n)")
+		reader := bufio.NewReader(os.Stdin)
+		inputChar, _, err := reader.ReadRune()
+		if err != nil {
+			fmt.Println("Error: could not read user input, selecting default: n:")
+			saveURLContents = false
+			saveChoice = true
+		} else {
+			if inputChar == 89 || inputChar == 121 {
+				saveURLContents = true
+				saveChoice = true
+			} else if inputChar == 78 || inputChar == 110 || inputChar == 13 || inputChar == 10 {
+				saveURLContents = false
+				saveChoice = true
+			} else {
+				fmt.Println("Choice invalid")
+				saveChoice = false
+			}
+		}
+	}
 
 	outfile, err := os.Create("result.txt")
 
@@ -56,16 +78,12 @@ func main() {
 
 	log.Println("CCP connection test tool version ", versionNum)
 
-	if *saveURLContents == false {
-		log.Println("successful web requests will not be stored for examination, specify -keepweb=true to store them")
-	}
-
 	log.Printf("begin tests")
 	runTests()
 }
 
 func runTests() {
-    testPing("8.8.8.8")
+	testPing("8.8.8.8")
 	testPing(tranquility)
 	tcpConnect(26000)
 	tcpConnect(3724)
@@ -120,7 +138,7 @@ func testLauncherURL(url string) {
 		return
 	}
 
-	if *saveURLContents {
+	if saveURLContents {
 		filename := "./" + cleanURL(url) + ".txt"
 		outfile, err := os.Create(filename)
 
