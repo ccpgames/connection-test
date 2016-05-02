@@ -17,7 +17,7 @@ import (
 )
 
 var tranquility = "tranquility.servers.eveonline.com"
-var versionNum = "1.0.9"
+var versionNum = "1.0.10"
 var saveURLContents = false
 var unlimitedPing = false
 
