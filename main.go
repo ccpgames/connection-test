@@ -16,9 +16,10 @@ import (
 	"strings"
 )
 
+var tranquility = "tranquility.servers.eveonline.com"
 var versionNum = "1.0.8"
-var tranquility = "87.237.38.200"
 var saveURLContents = false
+var unlimitedPing = false
 
 var writer io.Writer
 
@@ -61,6 +62,29 @@ func main() {
 			}
 		}
 	}
+    
+    pingChoice := false
+	for pingChoice == false {
+		fmt.Println("Do you wish to run the ping command against tranquility indefinitely? y/n (default: n)")
+		reader := bufio.NewReader(os.Stdin)
+		inputChar, _, err := reader.ReadRune()
+		if err != nil {
+			fmt.Println("Error: could not read user input, selecting default: n:")
+			unlimitedPing = false
+			pingChoice = true
+		} else {
+			if inputChar == 89 || inputChar == 121 {
+				unlimitedPing = true
+				pingChoice = true
+			} else if inputChar == 78 || inputChar == 110 || inputChar == 13 || inputChar == 10 {
+				unlimitedPing = false
+				pingChoice = true
+			} else {
+				fmt.Println("Choice invalid")
+				pingChoice = false
+			}
+		}
+	}
 
 	outfile, err := os.Create("result.txt")
 
@@ -87,35 +111,11 @@ func runTests() {
 	testPing(tranquility)
 	tcpConnect(26000)
 	tcpConnect(3724)
-	testPortOpen(26000)
-	testPortOpen(3724)
 	testLauncherURL("http://client.eveonline.com/patches/premium_patchinfoTQ_inc.txt")
 	testLauncherURL("http://web.ccpgamescdn.com/launcher/tranquility/selfupdates.htm")
-}
-
-func testPortOpen(port uint64) {
-	log.Println("======PORT FORWARDING TEST======")
-
-	urlStr := "http://tuq.in/tools/port.txt?port=" + strconv.FormatUint(port, 10)
-	resp, err := http.Get(urlStr)
-
-	if err != nil {
-		log.Println("port open check failed, could not get address")
-		log.Println(err)
-		return
-	}
-
-	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
-
-	if err != nil {
-		log.Println("port open check failed, could not read response")
-		log.Println(err)
-		return
-	}
-
-	bodyString := string(body[:])
-	log.Println("The scan of port ", port, " returned ", bodyString)
+    if unlimitedPing {
+        unlimitedPingTest(tranquility)
+    }
 }
 
 func testLauncherURL(url string) {
@@ -164,6 +164,26 @@ func testPing(pingTarget string) {
 		cmd = exec.Command("ping", pingTarget)
 	} else {
 		cmd = exec.Command("ping", "-c 5", pingTarget)
+	}
+
+	cmd.Stdout = writer
+	err := cmd.Run()
+
+	if err != nil {
+		log.Println("ping test failure")
+		log.Println(err)
+	}
+}
+
+func unlimitedPingTest(pingTarget string) {
+	log.Println("======UNLIMITED PING TEST======")
+    fmt.Println("You are now in unlimited ping mode. The connection tester will continue to ping tranquility and log the result until it errors, or until you close this window.")
+	var cmd *exec.Cmd
+
+	if runtime.GOOS == "windows" {
+		cmd = exec.Command("ping", "-t", pingTarget)
+	} else {
+		cmd = exec.Command("ping", pingTarget)
 	}
 
 	cmd.Stdout = writer

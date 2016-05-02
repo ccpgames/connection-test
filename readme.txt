@@ -5,13 +5,16 @@ ping test:
 *a failure to ping 8.8.8.8 may indicate a general failure of the users internet (8.8.8.8 is extremely reliable)
 *if TQ is under DDOS mitigation, the tq ping may time out despite a functional connection.
 
+unlimited ping mode:
+*this will, after conducting all other tests, ping tranquility until stopped
+*this may be useful for testing connection stability
+*if TQ is under DDOS mitigation, the tq ping may time out despite a functional connection.
+*the user can stop the ping at any time by closing the window or pressing ctrl-c
+*the results file can be copied elsewhere and submitted for examination while the unlimited ping is running
+
 tcp test:
 *this test will attempt to perform a tcp connection to TQ on ports 26000 and 3724
 *it will return either "connection successful" or an error
-
-port forwarding test:
-*this test requests that an external service probe ports 26000 and 3724 and report whether they are forwarded or not
-*this test will usually return false, as it is not necessary to forward these ports to access TQ
 
 http test:
 *this test makes requests to http endpoints that are commonly used by the launcher/repair tool
