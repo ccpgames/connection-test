@@ -16,8 +16,8 @@ import (
 	"strings"
 )
 
-var tranquility = "tranquility.servers.eveonline.com"
-var versionNum = "1.0.10"
+var tranquility = "87.237.34.202"
+var versionNum = "1.0.11"
 var saveURLContents = false
 var unlimitedPing = false
 
